@@ -1,0 +1,7 @@
+{
+  "name": "qtblocks license form",
+  "description": "A web application for schools to register for software licenses and submit device machine IDs. It features a registration form with logo upload and a machine ID submission form with QR code scanning capabilities, all integrated with a Google Sheets and Google Drive backend via Google Apps Script.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
