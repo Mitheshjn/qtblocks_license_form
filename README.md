@@ -1,18 +1,12 @@
-# Smart License & ID System - Full Documentation
+# Full Documentation
 
 ## 1. Product Overview
 
-The **Smart License & ID System** is a streamlined web application designed for educational institutions or organizations to manage software license registrations and device machine ID submissions. It provides a simple, user-friendly interface for administrators to register their institution and a separate interface to submit unique machine identifiers required for software activation.
+The **QtBlocks license form** is a streamlined web application designed for educational institutions or organizations to manage software license registrations and device machine ID submissions. It provides a simple, user-friendly interface for administrators to register their institution and a separate interface to submit unique machine identifiers required for software activation.
 
 The application is built as a serverless frontend that communicates directly with a Google Workspace backend (Google Sheets and Google Drive) via a Google Apps Script, making it a cost-effective and easy-to-manage solution.
 
-### 1.1. Target Audience
-
-*   School IT Administrators
-*   Software vendors managing educational licenses
-*   Organizations needing a simple system to collect registration data and device IDs.
-
-### 1.2. Key Features
+### 1. Key Features
 
 *   **Institution Registration:** A clean form for schools to submit their contact details, school information, and upload a logo.
 *   **Unique Reference ID:** Upon successful registration, a unique Reference ID is generated and displayed, linking all future submissions to that institution.
@@ -245,14 +239,14 @@ Open `http://localhost:3000` in your browser to see the application.
 
 ### 6.1. Step 1: Create and Push to a GitHub Repository
 
-1.  Go to [GitHub](https://github.com/) and create a new repository (e.g., `smart-license-system`).
+1.  Go to [GitHub](https://github.com/) and create a new repository (e.g., `license-system`).
 2.  Initialize git locally and push your code:
     ```bash
     git init
     git add .
     git commit -m "Initial commit"
     git branch -M main
-    git remote add origin https://github.com/your-username/smart-license-system.git
+    git remote add origin https://github.com/your-username/project-name.git
     git push -u origin main
     ```
 
