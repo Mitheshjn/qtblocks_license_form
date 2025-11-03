@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style> body { padding: 15px; } #status, #result-area { margin-top: 1rem; } </style>
+  </head>
+  <body>
+    <h5>Sync Machine IDs to TXT File</h5>
+    
+    <div class="form-group">
+      <label for="referenceId">Reference ID</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="referenceId" placeholder="Enter ID and Fetch">
+        <div class="input-group-append">
+          <button class="btn btn-secondary" type="button" id="fetch-button">Fetch IDs</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-area" class="d-none">
+      <div class="form-group">
+        <label for="machineIds">Fetched Machine IDs</label>
+        <textarea class="form-control" id="machineIds" rows="8" readonly></textarea>
+        <small class="form-text text-muted">Review the IDs, then click below to save them to the Drive TXT file.</small>
+      </div>
+      <button class="btn btn-primary btn-block" id="update-button">Update TXT File</button>
+    </div>
+
+    <div id="status"></div>
+
+    <script>
+      const refIdInput = document.getElementById('referenceId');
+      const fetchBtn = document.getElementById('fetch-button');
+      const updateBtn = document.getElementById('update-button');
+      const resultArea = document.getElementById('result-area');
+      const idsTextarea = document.getElementById('machineIds');
+      const statusDiv = document.getElementById('status');
+
+      fetchBtn.addEventListener('click', () => {
+        const refId = refIdInput.value.trim();
+        if (!refId) return;
+        
+        toggleLoading(fetchBtn, true);
+        statusDiv.innerHTML = '';
+        resultArea.classList.add('d-none');
+
+        google.script.run
+          .withSuccessHandler(ids => {
+            toggleLoading(fetchBtn, false);
+            if (ids && ids.length > 0) {
+              idsTextarea.value = ids.join('\n');
+              resultArea.classList.remove('d-none');
+            } else {
+              showStatus('No Machine IDs found for this Reference ID.', 'alert-warning');
+            }
+          })
+          .withFailureHandler(err => {
+            toggleLoading(fetchBtn, false);
+            showStatus(`Error: ${err.message}`, 'alert-danger');
+          })
+          .getMachineIdsForReferenceId(refId);
+      });
+
+      updateBtn.addEventListener('click', () => {
+        const refId = refIdInput.value.trim();
+        const content = idsTextarea.value;
+        
+        toggleLoading(updateBtn, true);
+        
+        google.script.run
+          .withSuccessHandler(response => {
+            toggleLoading(updateBtn, false);
+            showStatus(response.message, response.success ? 'alert-success' : 'alert-danger');
+          })
+          .withFailureHandler(err => {
+            toggleLoading(updateBtn, false);
+            showStatus(`Error: ${err.message}`, 'alert-danger');
+          })
+          .updateMachineIdTxtFile(refId, content);
+      });
+      
+      function showStatus(message, alertClass) {
+        statusDiv.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+      }
+
+      function toggleLoading(button, isLoading) {
+        button.disabled = isLoading;
+        button.innerHTML = isLoading ? '<span class="spinner-border spinner-border-sm"></span>' : button.innerText;
+      }
+    </script>
+  </body>
+</html>

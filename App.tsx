@@ -39,7 +39,7 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
       <footer className="text-center py-4 text-gray-500 text-sm mt-8">
-        <p>&copy; {new Date().getFullYear()} Smart License System. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} QTPI. All rights reserved.</p>
       </footer>
     </div>
   );

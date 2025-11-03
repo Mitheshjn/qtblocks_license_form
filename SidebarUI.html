@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style> body { padding: 15px; } #status-message { margin-top: 1rem; } </style>
+  </head>
+  <body>
+    <h5>Upload License or EXE</h5>
+    <p class="text-muted small">Select one or more files to upload for the specified Reference ID.</p>
+    
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="referenceId">Reference ID</label>
+        <input type="text" class="form-control" id="referenceId" required>
+      </div>
+      <div class="form-group">
+        <label for="fileInput">Select File(s)</label>
+        <input type="file" class="form-control-file" id="fileInput" multiple required>
+      </div>
+      <button type="submit" id="submit-button" class="btn btn-primary btn-block">Upload</button>
+    </form>
+    
+    <div id="status-message"></div>
+
+    <script>
+      document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const files = document.getElementById('fileInput').files;
+        const referenceId = document.getElementById('referenceId').value;
+        const statusDiv = document.getElementById('status-message');
+        
+        if (files.length === 0 || !referenceId) return;
+
+        document.getElementById('submit-button').disabled = true;
+        statusDiv.innerHTML = `<div class="alert alert-info">Uploading ${files.length} file(s)...</div>`;
+        let responses = [];
+
+        Array.from(files).forEach((file, index) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            const formObject = {
+              referenceId: referenceId,
+              fileName: file.name,
+              mimeType: file.type,
+              fileData: reader.result
+            };
+
+            google.script.run
+              .withSuccessHandler(response => {
+                responses.push(response);
+                if (responses.length === files.length) {
+                  displayFinalStatus(responses);
+                }
+              })
+              .withFailureHandler(error => {
+                responses.push({ success: false, message: `Script error for ${file.name}: ${error.message}` });
+                 if (responses.length === files.length) {
+                  displayFinalStatus(responses);
+                }
+              })
+              .uploadFileToDrive(formObject);
+          };
+        });
+      });
+
+      function displayFinalStatus(responses) {
+        const statusDiv = document.getElementById('status-message');
+        let successMessages = responses.filter(r => r.success).map(r => r.message).join('<br>');
+        let errorMessages = responses.filter(r => !r.success).map(r => r.message).join('<br>');
+        
+        let finalHtml = '';
+        if (successMessages) {
+          finalHtml += `<div class="alert alert-success">${successMessages}</div>`;
+        }
+        if (errorMessages) {
+          finalHtml += `<div class="alert alert-danger">${errorMessages}</div>`;
+        }
+        
+        statusDiv.innerHTML = finalHtml;
+        document.getElementById('submit-button').disabled = false;
+        document.getElementById('uploadForm').reset();
+      }
+    </script>
+  </body>
+</html>

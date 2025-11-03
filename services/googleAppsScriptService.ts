@@ -1,5 +1,5 @@
 // IMPORTANT: Replace this with the URL you get after deploying your Google Apps Script.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3tYFLPhyC-CpHNEi0isHLoULkYdCK_pDID_URUbm435sg4MLtR4YBmLyXLgMLBRN7/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyhe53k0RkuYSWMBkBXEVY2azP4o5rXcWI6lmJxcuA-eH5zE1Uw4bZVtSaqp8YKU-W8wQ/exec';
 
 export const submitToGoogleScript = async (payload: Record<string, any>): Promise<any> => {
   if (APPS_SCRIPT_URL.includes('YOUR_WEB_APP_URL_HERE') || !APPS_SCRIPT_URL) {

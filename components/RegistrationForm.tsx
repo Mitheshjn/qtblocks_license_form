@@ -103,7 +103,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onBack }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {Object.entries({
           name: { label: 'Contact Name', type: 'text', placeholder: 'John Doe' },
-          phone: { label: 'Phone Number', type: 'tel', placeholder: '123-456-7890' },
+          phone: { label: 'Phone Number (preferably WhatsApp)', type: 'tel', placeholder: '123-456-7890' },
           email: { label: 'Email Address', type: 'email', placeholder: 'john.doe@example.com' },
           schoolName: { label: 'School Name', type: 'text', placeholder: 'Springfield Elementary' },
           city: { label: 'Area / City', type: 'text', placeholder: 'Springfield' },
@@ -124,7 +124,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onBack }) => {
         ))}
 
         <div>
-          <label htmlFor="logo" className="block text-sm font-medium text-gray-700 mb-1">School Logo</label>
+          <label htmlFor="logo" className="block text-sm font-medium text-gray-700 mb-1">School Logo (Official Logo)</label>
           <input
             type="file"
             name="logo"
@@ -133,6 +133,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onBack }) => {
             onChange={handleFileChange}
             className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
+          <p className="mt-1 text-xs text-gray-500">This cannot be changed later, so please select the file carefully.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row-reverse gap-4 pt-4">
